@@ -13,7 +13,7 @@ function App() {
         <TimerChallenge title="Pros only" targetTime={15} />
       </div>
 
-      <Scoreboard text="test" />
+      {/* <Scoreboard text="test" /> */}
     </>
   );
 }
