@@ -1,17 +1,28 @@
 import ResultModal from "./ResultModal.jsx";
 import { useState, useRef } from "react";
 
-export default function TimerChallenge({ title, targetTime }) {
+export default function TimerChallenge({
+  title,
+  targetTime,
+  updatePlayerScores,
+}) {
   const timer = useRef();
   const dialog = useRef();
 
   const [timeRemaining, setTimeRemaining] = useState(targetTime * 1000);
 
+  const score = ((1 - timeRemaining / (targetTime * 1000)) * 100).toFixed(2);
+  const difficulty = title;
   const timerisActive = timeRemaining > 0 && timeRemaining < targetTime * 1000;
 
-  if (timeRemaining <= 0) {
+  function handleEndRound() {
     clearInterval(timer.current);
+    updatePlayerScores(score, difficulty);
     dialog.current.open();
+  }
+
+  if (timeRemaining <= 0) {
+    handleEndRound();
   }
 
   function handleReset() {
@@ -25,13 +36,13 @@ export default function TimerChallenge({ title, targetTime }) {
   }
 
   function handleStop() {
-    clearInterval(timer.current);
-    dialog.current.open();
+    handleEndRound();
   }
 
   return (
     <>
       <ResultModal
+        score={score}
         ref={dialog}
         targetTime={targetTime}
         remainingTime={timeRemaining}
